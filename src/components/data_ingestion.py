@@ -5,6 +5,8 @@ from src.logger import logging
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
+from src.components.data_transformation import Datatransformation
+from src.components.data_transformation import DataTransformationconfig
 
 @dataclass
 class Dataingestionconfig:
@@ -22,7 +24,7 @@ class Dataingestion:
             df = pd.read_csv(r'artifacts\data.csv')
             logging.info('Read the dataset as DataFrame')
 
-            # ✅ FIX: Create artifacts directory (NOT a file path)
+           
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
 
             # Save raw data
@@ -43,5 +45,8 @@ class Dataingestion:
             raise CustomException(e, sys)
 
 if __name__ == "__main__":
+
     obj = Dataingestion()
-    obj.initiate_data_ingestion()
+    train_data,test_data=obj.initiate_data_ingestion()
+    data_transformation=Datatransformation()
+    data_transformation.initiate_data_transformation(train_data,test_data)
